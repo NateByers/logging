@@ -11,9 +11,6 @@
 #' logging_project <- add_log_table(logging_project, "1", x)
 #' save_logging(logging_project)
 save_logging <- function(logging_project) {
-  #logging_project <- use_logging("//chp.clarian.org/group/MH/MH System Clinical Services/Virtual Visits Implementation/Telehealth Director's Folder/COVID-19/QA/HR Data Reporting/log.yaml")
-  #log_id <- "1"; log_table <- data.frame(test = 1:10, this = letters[1:10])
-  #logging_project <- add_log_table(logging_project, log_id, log_table)
 
   wb <- openxlsx::createWorkbook()
 
@@ -41,7 +38,8 @@ save_logging <- function(logging_project) {
 
   }
 
-  openxlsx::writeData(wb, "README", sheets, startRow = nrow(project) + 4)
+  openxlsx::writeData(wb, "README", sheets, startRow = nrow(project) + 4,
+                      startCol = ncol(project) + 1)
 
   openxlsx::saveWorkbook(wb, file = logging_project$log_file, overwrite = TRUE)
 }
