@@ -31,31 +31,35 @@ add_log_table <- function(logging_project, log_id, log_table) {
   for(i in seq_along(logging_project$logs)) {
     # i <- 1
 
-    if("corrected_column" %in% names(logging_project$logs[[i]])) {
+    if(logging_project$logs[[i]]$id == log_id) {
 
-      if(file.exists(logging_project$log_file)) {
+      if("corrected_column" %in% names(logging_project$logs[[i]])) {
 
-        log_table_ <- readxl::read_excel(logging_project$log_file,
-                                         logging_project$logs[[i]]$name) %>%
-          dplyr::mutate_at(logging_project$logs[[i]]$corrected_column, toupper) %>%
-          dplyr::mutate_all(as.character)
+        if(file.exists(logging_project$log_file)) {
 
-        join_columns <- names(log_table)[names(log_table) %in% names(log_table_)]
+          log_table_ <- readxl::read_excel(logging_project$log_file,
+                                           logging_project$logs[[i]]$name) %>%
+            dplyr::mutate_at(logging_project$logs[[i]]$corrected_column, toupper) %>%
+            dplyr::mutate_all(as.character)
 
-        corrected_column_list <- list()
-        corrected_column_list[[logging_project$logs[[i]]$corrected_column]] <- "FALSE"
+          join_columns <- names(log_table)[names(log_table) %in% names(log_table_)]
 
-        log_table <- log_table %>%
-          dplyr::ungroup() %>%
-          dplyr::mutate_all(as.character) %>%
-          dplyr::full_join(log_table_, join_columns) %>%
-          tidyr::replace_na(corrected_column_list)
+          corrected_column_list <- list()
+          corrected_column_list[[logging_project$logs[[i]]$corrected_column]] <- "FALSE"
+
+          log_table <- log_table %>%
+            dplyr::ungroup() %>%
+            dplyr::mutate_all(as.character) %>%
+            dplyr::full_join(log_table_, join_columns) %>%
+            tidyr::replace_na(corrected_column_list)
+
+        }
 
       }
 
-    }
+      logging_project$logs[[i]]$table <- log_table
 
-    logging_project$logs[[i]]$table <- log_table
+    }
 
   }
 
