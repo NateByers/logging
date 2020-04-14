@@ -1,6 +1,6 @@
 Package: logging
 Type: Package
-Title: Create log files
+Title: Create project log file
 Version: 0.1.0
 Author: Nathan Byers
 Maintainer: Nathan Byers <nbyers1@iuhealth.org>
