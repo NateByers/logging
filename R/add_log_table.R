@@ -46,6 +46,7 @@ add_log_table <- function(logging_project, log_id, log_table) {
         corrected_column_list[[logging_project$logs[[i]]$corrected_column]] <- "FALSE"
 
         log_table <- log_table %>%
+          dplyr::ungroup() %>%
           dplyr::mutate_all(as.character) %>%
           dplyr::full_join(log_table_, join_columns) %>%
           tidyr::replace_na(corrected_column_list)
